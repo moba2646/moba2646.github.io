@@ -6,10 +6,15 @@
     <title>Document</title>
 
     <style>
+      root {
+        background-color: cadetblue;
+      }
+
       body {
         font: 1.2em / 1.5 system-ui;
         margin: 0 auto;
         width: 500px;
+        background-color: navajowhite;
       }
 
       fieldset {
@@ -27,18 +32,33 @@
         padding: 5px;
         width: 50%;
         display: block;
+        border:
+          solid red,
+          2px;
       }
 
       div,
       fieldset {
         margin-top: 20px;
+        border-top: solid 1px black;
+        padding-top: 2rem;
       }
 
       p {
         margin-top: 10px;
-        background: #ffc125;
+        background: pink;
         padding: 20px;
         visibility: hidden;
+      }
+
+      .generate {
+        border-color: red;
+        color: white;
+        background-color: black;
+        font-size: larger;
+        border-radius: 2rem;
+        padding: 1.5rem;
+        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       }
     </style>
   </head>
@@ -89,7 +109,7 @@
         const randomPlace = randomValueFromArray(places);
         const randomEvent = randomValueFromArray(events);
 
-        let storyText = `It was 94 Fahrenheit outside, so ${randomCharacter} went for a little stroll. When they got to ${randomPlace}, they stared in horror for a few moments, did a little jig, then ${randomEvent}. Bob saw the whole thing, but was not surprised — ${randomCharacter} weighs 300 pounds, and it was a hot day.`;
+        let storyText = `It was 94 Fahrenheit outside, so ${randomCharacter} went out for a little stroll. When they got to ${randomPlace}, they did a little jig, said "Oh boy do I love hot dogs!", then ${randomEvent}. Bob saw the whole thing, but was not surprised — ${randomCharacter} weighs 300 pounds, and it was a hot day.`;
 
         return storyText;
       }
@@ -114,6 +134,7 @@
           newStory = newStory.replace("94 Fahrenheit", temperature);
         }
 
+        console.log(newStory);
         story.textContent = newStory;
         story.style.visibility = "visible";
       }
