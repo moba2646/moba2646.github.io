@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Phone Number</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@1..144,1..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Enter Your Phone Number</h1>
+            <p class="body-text">We just need ten digits. How hard could it be?</p>
+        </header>
+
+        <main class="layout">
+            <!-- ===== Instructions ===== -->
+            <section class="instructions" aria-labelledby="instructions-heading">
+                <h2 id="instructions-heading">How it works</h2>
+                <ol id="instructions-list" class="instructions-list">
+                    <li>Use the arrow buttons to slide a row or column. Tiles that slide off one edge come back on the other.</li>
+                    <li>Get the digit you want into the <strong>center tile</strong>, which has the red border.</li>
+                    <li>Press <strong>Lock in</strong> to add that digit to your phone number.</li>
+                    <li>Repeat until all ten digits are filled, then press <strong>Submit</strong>.</li>
+                </ol>
+            </section>
+
+            <!-- ===== Phone input ===== -->
+            <form id="phone-form" class="phone-form" action="#" method="post" novalidate>
+                <fieldset class="phone-fieldset" aria-describedby="instructions-list">
+                    <legend class="phone-legend">Phone number</legend>
+
+                    <!-- Phone number display.
+                         The boxes are hidden from screen readers. JS keeps
+                         #phone-readable in sync so the number is still read aloud. -->
+                    <div class="phone-display" id="phone-display">
+                        <div class="phone-slots" aria-hidden="true">
+                            <span class="phone-sep">(</span>
+                            <span class="phone-slot" data-slot="0"></span>
+                            <span class="phone-slot" data-slot="1"></span>
+                            <span class="phone-slot" data-slot="2"></span>
+                            <span class="phone-sep">)</span>
+                            <span class="phone-slot" data-slot="3"></span>
+                            <span class="phone-slot" data-slot="4"></span>
+                            <span class="phone-slot" data-slot="5"></span>
+                            <span class="phone-sep">&ndash;</span>
+                            <span class="phone-slot" data-slot="6"></span>
+                            <span class="phone-slot" data-slot="7"></span>
+                            <span class="phone-slot" data-slot="8"></span>
+                            <span class="phone-slot" data-slot="9"></span>
+                        </div>
+                        <p id="phone-readable" class="visually-hidden">No digits entered yet. 10 digits remaining.</p>
+                    </div>
+
+                    <!-- The value that gets submitted. JS fills this in. -->
+                    <input type="hidden" name="phone" id="phone-value" value="">
+
+                    <!-- ===== Cube board =====
+                         Shift buttons: data-axis = "row" | "col"
+                                        data-index = 0 | 1 | 2
+                                        data-direction = "up" | "down" | "left" | "right"
+                         Cells: data-row / data-col (0 to 2). Center cell = data-target -->
+                    <div class="board" id="board">
+
+                        <!-- Column up -->
+                        <button type="button" class="shift-btn" data-axis="col" data-index="0" data-direction="up">
+                            <span class="shift-icon" aria-hidden="true">&#9650;</span>
+                            <span class="visually-hidden">Move column 1 up</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="col" data-index="1" data-direction="up">
+                            <span class="shift-icon" aria-hidden="true">&#9650;</span>
+                            <span class="visually-hidden">Move column 2 up</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="col" data-index="2" data-direction="up">
+                            <span class="shift-icon" aria-hidden="true">&#9650;</span>
+                            <span class="visually-hidden">Move column 3 up</span>
+                        </button>
+
+                        <!-- Row left -->
+                        <button type="button" class="shift-btn" data-axis="row" data-index="0" data-direction="left">
+                            <span class="shift-icon" aria-hidden="true">&#9664;</span>
+                            <span class="visually-hidden">Move row 1 left</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="row" data-index="1" data-direction="left">
+                            <span class="shift-icon" aria-hidden="true">&#9664;</span>
+                            <span class="visually-hidden">Move row 2 left</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="row" data-index="2" data-direction="left">
+                            <span class="shift-icon" aria-hidden="true">&#9664;</span>
+                            <span class="visually-hidden">Move row 3 left</span>
+                        </button>
+
+                        <!-- The 3x3 grid. Reading order is row 1 left to right, then row 2, then row 3. -->
+                        <ol class="cube" id="cube" aria-label="Number grid, 3 by 3">
+                            <li class="cube-cell" data-row="0" data-col="0">
+                                <span class="visually-hidden">Row 1, column 1: </span><span class="cube-digit">4</span>
+                            </li>
+                            <li class="cube-cell" data-row="0" data-col="1">
+                                <span class="visually-hidden">Row 1, column 2: </span><span class="cube-digit">0</span>
+                            </li>
+                            <li class="cube-cell" data-row="0" data-col="2">
+                                <span class="visually-hidden">Row 1, column 3: </span><span class="cube-digit">7</span>
+                            </li>
+                            <li class="cube-cell" data-row="1" data-col="0">
+                                <span class="visually-hidden">Row 2, column 1: </span><span class="cube-digit">7</span>
+                            </li>
+                            <li class="cube-cell cube-cell--target" data-row="1" data-col="1" data-target>
+                                <span class="visually-hidden">Row 2, column 2, lock-in tile: </span><span class="cube-digit">2</span>
+                            </li>
+                            <li class="cube-cell" data-row="1" data-col="2">
+                                <span class="visually-hidden">Row 2, column 3: </span><span class="cube-digit">9</span>
+                            </li>
+                            <li class="cube-cell" data-row="2" data-col="0">
+                                <span class="visually-hidden">Row 3, column 1: </span><span class="cube-digit">1</span>
+                            </li>
+                            <li class="cube-cell" data-row="2" data-col="1">
+                                <span class="visually-hidden">Row 3, column 2: </span><span class="cube-digit">7</span>
+                            </li>
+                            <li class="cube-cell" data-row="2" data-col="2">
+                                <span class="visually-hidden">Row 3, column 3: </span><span class="cube-digit">5</span>
+                            </li>
+                        </ol>
+
+                        <!-- Row right -->
+                        <button type="button" class="shift-btn" data-axis="row" data-index="0" data-direction="right">
+                            <span class="shift-icon" aria-hidden="true">&#9654;</span>
+                            <span class="visually-hidden">Move row 1 right</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="row" data-index="1" data-direction="right">
+                            <span class="shift-icon" aria-hidden="true">&#9654;</span>
+                            <span class="visually-hidden">Move row 2 right</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="row" data-index="2" data-direction="right">
+                            <span class="shift-icon" aria-hidden="true">&#9654;</span>
+                            <span class="visually-hidden">Move row 3 right</span>
+                        </button>
+
+                        <!-- Column down -->
+                        <button type="button" class="shift-btn" data-axis="col" data-index="0" data-direction="down">
+                            <span class="shift-icon" aria-hidden="true">&#9660;</span>
+                            <span class="visually-hidden">Move column 1 down</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="col" data-index="1" data-direction="down">
+                            <span class="shift-icon" aria-hidden="true">&#9660;</span>
+                            <span class="visually-hidden">Move column 2 down</span>
+                        </button>
+                        <button type="button" class="shift-btn" data-axis="col" data-index="2" data-direction="down">
+                            <span class="shift-icon" aria-hidden="true">&#9660;</span>
+                            <span class="visually-hidden">Move column 3 down</span>
+                        </button>
+                    </div>
+
+                    <!-- Announces each move to screen readers, e.g. "Row 2 moved left. Center tile is now 7." -->
+                    <p id="cube-status" class="visually-hidden" role="status"></p>
+
+                    <!-- ===== Controls ===== -->
+                    <div class="controls">
+                        <button type="button" id="lock-btn" class="button button--lock">
+                            Lock in <span id="lock-digit" class="lock-digit">2</span>
+                        </button>
+                        <button type="button" id="backspace-btn" class="button button--outline">
+                            <span aria-hidden="true">&#9003;</span> Backspace
+                        </button>
+                        <button type="submit" id="submit-btn" class="button button--submit">
+                            Submit
+                        </button>
+                    </div>
+
+                    <!-- Errors and confirmation after Submit. JS sets the text and adds .is-error or .is-success. -->
+                    <p id="form-message" class="form-message" role="status"></p>
+                </fieldset>
+            </form>
+        </main>
+
+        <noscript>
+            <p class="form-message is-error">This phone input needs JavaScript. (Honestly, that's the least frustrating part.)</p>
+        </noscript>
+    </div>
+</body>
+</html>
