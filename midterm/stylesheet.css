@@ -77,6 +77,15 @@
             color: var(--color-accent);
         }
 
+        
+        /* ADDED */
+        p {
+            font-family: var(--font-secondary);
+            font-size: 1rem;
+
+        }
+        /*  */
+
         .body-text {
             font-family: var(--font-secondary);
             font-size: 1rem;
@@ -222,4 +231,23 @@
             color: white;
             text-decoration: none;
             font-size: 1rem;
+        }
+
+        /* HOME PAGE */
+        .homeHero {
+            display: flex;
+            flex-wrap: wrap;
+            width: fit-content;
+            align-items: center;
+            border: #DF1645 10px;
+        }
+
+        .hero img {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            object-fit: cover;
+            /* padding-top: var(--spacing-md); */
+            /* border: solid 2rem #DF1645; */
+            margin-top: var(--spacing-md);
         }
