@@ -11,7 +11,7 @@ const backspaceBtn = document.getElementById('backspace-btn');
 
 const cellEls = [[], [], []];
 document.querySelectorAll('.cube-cell').forEach((cell) => {
-    cellEls[Number(cell.dateset.row)][Number(cell.dataset.col)] = cell;
+    cellEls[Number(cell.dataset.row)][Number(cell.dataset.col)] = cell;
 });
 
 // 
@@ -28,13 +28,13 @@ const digits = [];
 function rotate(arr, toStart) {
     return toStart
         ? [...arr.slice(1), arr[0]]
-        : [arr[arr,length - 1], ...arr.slice(0, -1)];
+        : [arr[arr.length - 1], ...arr.slice(0, -1)];
 }
 
 function renderBoard() {
     for (let r = 0; r < 3; r++){
         for (let c = 0; c < 3; c++){
-            cellEls[r][c].querySelector('.cube-digit'),textContent = grid[r][c];
+            cellEls[r][c].querySelector('.cube-digit').textContent = grid[r][c];
         }
     }
 }
@@ -43,7 +43,7 @@ function shift(axis, index, direction) {
     const toStart = direction === 'left' || direction === 'up';
 
     if(axis === 'row'){
-        gird[index] = rotate(grid[index], toStart);
+        grid[index] = rotate(grid[index], toStart);
     }
     else {
         const column = rotate(grid.map((row) =>row[index]), toStart);
@@ -67,32 +67,17 @@ function backspace() {
         return;
     }
     digits.pop();
-    renderPhone;
+    renderPhone();
 }
 
-// 
+// Event Listeners
 
+shiftButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        shift(btn.dataset.axis, Number(btn.dataset.index), btn.dataset.direction);
+    });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+backspaceBtn.addEventListener('click', backspace);
 
 })();
